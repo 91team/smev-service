@@ -1,0 +1,8 @@
+.idea
+/dist
+/keys
+/lib/*
+!/lib/.keep
+/target
+.DS_Store
+adminservtool.log

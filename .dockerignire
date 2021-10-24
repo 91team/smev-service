@@ -1,0 +1,7 @@
+.idea
+/keys
+Dockerfile
+README.md
+.DS_Store
+/target
+adminservtool.log
