@@ -12,21 +12,11 @@ application {
     mainClass.set("MainKt")
 }
 
-//
-//tasks.jar {
-//    manifest {
-//        attributes("Main-Class" to "MainKt")
-//    }
-////    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-//}
-
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
-//    compile fileTree(dir: "lib", include: ["*.jar"])
     implementation(fileTree("lib"))
 }
 
