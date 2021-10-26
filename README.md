@@ -4,13 +4,13 @@
 - Загрузить в папку `lib` зависимости СМЭВ Клиента ("Рекомендуемая версия библиотек для сборки клиента СМЭВ 3. Схема версии 1.3" https://smev3.gosuslugi.ru/portal/)
 - Загрузить в папку `lib` crypto-2.0.jar ("Библиотека crypto-2.0 для создания и проверки ЭП" https://smev3.gosuslugi.ru/portal/)
 
-## Сборка
+## Сборка образа
 
 `docker build -t harbor.91.vpn/smev/adapter:latest .`
 
 `docker push harbor.91.vpn/smev/adapter:latest`
 
-## Запуск
+## Запуск контейнера
 
 ```
 docker run --rm -it \
@@ -27,8 +27,6 @@ docker run --rm -it \
 
 Скопировать файлы ключевого контейнера в папку `/var/opt/cprocsp/keys/$USER/smev`
 
-Добавить зависимости из папки lib - File > Project Structure > Modules > Dependencies
-
 Изменить конфигурацию приложения
 
 ### Форвардинг адреса продакшен контура с удаленного сервера
@@ -42,6 +40,7 @@ docker run --rm -it \
 TODO
 
 ## Функциональность
+- Поддержка версии схемы 1.3
 - Отправка запросов
 - TODO Отправка запросов с вложениями
 - TODO Отправка запросов с вложениями на FTP
