@@ -90,7 +90,6 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
         }
     }
 
-
     @Throws(Exception::class)
     fun receive() {
         // Создание нового экземпляра запроса
@@ -120,6 +119,41 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
         try {
             val resp: GetResponseResponse = smev.smevMessageExchangeEndpoint.getResponse(reqParam)
             println("resp = " + ObjectToString(resp, GetResponseResponse::class.java))
+        } catch (e: java.lang.Exception) {
+            println("ERROR ${e.javaClass.name}: ${e.message}")
+        }
+    }
+
+
+    @Throws(Exception::class)
+    fun ack(messageId: String, accepted: Boolean = true) {
+        // Создание нового экземпляра запроса
+        val reqParam = AckRequest()
+
+        val ackMessage = AckTargetMessage()
+        ackMessage.id = "SIGNED_BY_CALLER"
+        ackMessage.isAccepted = accepted
+        ackMessage.value = messageId
+
+        reqParam.ackTargetMessage = ackMessage
+
+        val xmlSign = XMLDSigSignatureType()
+        val signContent: Element = ObjectToDocument(
+            reqParam.ackTargetMessage,
+            AckTargetMessage::class.java
+        ).documentElement
+        val signElement: Element = sign.sign(signContent)
+        xmlSign.any = signElement
+        reqParam.callerInformationSystemSignature = xmlSign
+        //выводится подписанный запрос *********************
+        println("request = " + ObjectToString(reqParam, AckRequest::class.java))
+        //*************************************
+        val doc: Document = ObjectToDocument(reqParam, AckRequest::class.java)
+        val messCont: NodeList = doc.documentElement.getElementsByTagNameNS("*", "MessagePrimaryContent")
+        // 3. Отправка сообщения в СМЭВ 3
+        val smev = SMEVMessageExchangeService(schemaUrl, smevMessageExchangeServiceQname)
+        try {
+            smev.smevMessageExchangeEndpoint.ack(reqParam)
         } catch (e: java.lang.Exception) {
             println("ERROR ${e.javaClass.name}: ${e.message}")
         }

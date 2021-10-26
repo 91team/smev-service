@@ -28,4 +28,7 @@ fun main(args: Array<String>) {
 
     // Recieve response from SMEV
     smevService.receive()
+
+    // Send Ack to SMEV
+//    smevService.ack("17b94c4e-35f2-11ec-86b4-acde48001122")
 }
