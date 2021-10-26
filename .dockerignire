@@ -1,7 +1,8 @@
 .idea
+.gradle
+/build
 /keys
 Dockerfile
 README.md
 .DS_Store
-/target
 adminservtool.log

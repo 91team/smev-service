@@ -13,22 +13,20 @@ RUN chmod +x setup_console.sh && \
 COPY dist/${JCP_VERSION}/dependencies/commons-logging-1.1.1.jar $JDK/jre/lib/ext/
 COPY dist/${JCP_VERSION}/dependencies/xmlsec-1.5.0.jar $JDK/jre/lib/ext/
 
-FROM jcp as builder
-
-RUN apt update && apt install -y maven
+FROM gradle:7.2-jdk8 as builder
 
 WORKDIR /opt/smev
 
 COPY . .
-RUN mvn package
+RUN gradle installDist --no-daemon
 
 FROM jcp
 
 WORKDIR /opt/smev
 
-COPY --from=builder /opt/smev/lib/*.jar $JDK/jre/lib/ext/
-COPY --from=builder /opt/smev/target/smev-1.0-SNAPSHOT-jar-with-dependencies.jar ./smev.jar
+# COPY --from=builder /opt/smev/lib/*.jar $JDK/jre/lib/ext/
+COPY --from=builder /opt/smev/build/install/smev/ ./
 
 VOLUME [ "/var/opt/cprocsp/keys/root" ]
 
-CMD ["/usr/bin/java", "-Dfile.encoding=UTF-8", "-jar", "smev.jar"]
+CMD ["bin/smev"]

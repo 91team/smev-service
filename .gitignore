@@ -1,8 +1,9 @@
 .idea
+.gradle
+/build
 /dist
 /keys
 /lib/*
 !/lib/.keep
-/target
 .DS_Store
 adminservtool.log
