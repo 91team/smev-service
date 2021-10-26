@@ -24,7 +24,6 @@ FROM jcp
 
 WORKDIR /opt/smev
 
-# COPY --from=builder /opt/smev/lib/*.jar $JDK/jre/lib/ext/
 COPY --from=builder /opt/smev/build/install/smev/ ./
 
 VOLUME [ "/var/opt/cprocsp/keys/root" ]

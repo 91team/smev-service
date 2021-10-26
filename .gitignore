@@ -3,7 +3,7 @@
 /build
 /dist
 /keys
-/lib/*
-!/lib/.keep
+/libs/*
+!/libs/.keep
 .DS_Store
 adminservtool.log

@@ -5,11 +5,11 @@ plugins {
     application
 }
 
-group = "team.91"
+group = "com.nineone"
 version = "0.0.1"
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("com.nineone.smev.MainKt")
 }
 
 repositories {
@@ -17,9 +17,9 @@ repositories {
 }
 
 dependencies {
-    implementation(fileTree("lib"))
+    api(fileTree("libs") { include("*.jar") })
 }
 
-tasks.withType<KotlinCompile>() {
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }

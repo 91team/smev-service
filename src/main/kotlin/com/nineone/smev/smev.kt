@@ -1,3 +1,5 @@
+package com.nineone.smev
+
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 // import org.w3c.dom.NodeList
@@ -44,7 +46,7 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
     }
 
     @Throws(Exception::class)
-    fun send() {
+    fun sendRequest() {
         // Создание нового экземпляра запроса
         val reqParam = SendRequestRequest()
         val sendReq = SenderProvidedRequestData()
@@ -91,7 +93,7 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
     }
 
     @Throws(Exception::class)
-    fun receive() {
+    fun getResponse() {
         // Создание нового экземпляра запроса
         val reqParam = GetResponseRequest()
 
@@ -109,11 +111,8 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
         val signElement: Element = sign.sign(signContent)
         xmlSign.any = signElement
         reqParam.callerInformationSystemSignature = xmlSign
-        //выводится подписанный запрос *********************
+        // выводится подписанный запрос
         println("request = " + objectToString(reqParam, GetResponseRequest::class.java))
-        //*************************************
-//        val doc: Document = objectToString(reqParam, GetResponseRequest::class.java)
-//        val messCont: NodeList = doc.documentElement.getElementsByTagNameNS("*", "MessagePrimaryContent")
         // 3. Отправка сообщения в СМЭВ 3
         val smev = SMEVMessageExchangeService(schemaUrl, smevMessageExchangeServiceQname)
         try {
@@ -126,7 +125,7 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
 
 
     @Throws(Exception::class)
-    fun ack(messageId: String, accepted: Boolean = true) {
+    fun sendAck(messageId: String, accepted: Boolean = true) {
         // Создание нового экземпляра запроса
         val reqParam = AckRequest()
 
@@ -145,11 +144,8 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
         val signElement: Element = sign.sign(signContent)
         xmlSign.any = signElement
         reqParam.callerInformationSystemSignature = xmlSign
-        //выводится подписанный запрос *********************
+        // выводится подписанный запрос
         println("request = " + objectToString(reqParam, AckRequest::class.java))
-        //*************************************
-//        val doc: Document = objectToString(reqParam, AckRequest::class.java)
-//        val messCont: NodeList = doc.documentElement.getElementsByTagNameNS("*", "MessagePrimaryContent")
         // 3. Отправка сообщения в СМЭВ 3
         val smev = SMEVMessageExchangeService(schemaUrl, smevMessageExchangeServiceQname)
         try {
