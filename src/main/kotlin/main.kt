@@ -12,7 +12,8 @@ fun main(args: Array<String>) {
 //    val smevService = SMEVService(
 //        schemaUrl = "http://smev3-n0.test.gosuslugi.ru:5000/ws/smev-message-exchange-service-1.3.wsdl",
 //        keyAlias = "skspb",
-//        keyPassword = "1234567890"
+//        keyPassword = "1234567890",
+//        isTest = true
 //    )
     val smevService = SMEVService(
 //        schemaUrl = "http://smev3-n0.test.gosuslugi.ru:5000/ws/smev-message-exchange-service-1.3.wsdl",
@@ -24,10 +25,10 @@ fun main(args: Array<String>) {
     )
 
     // Send message to SMEV
-//    smevService.send()
+    smevService.send()
 
     // Recieve response from SMEV
-    smevService.receive()
+//    smevService.receive()
 
     // Send Ack to SMEV
 //    smevService.ack("17b94c4e-35f2-11ec-86b4-acde48001122")
