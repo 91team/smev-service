@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
             initSmev().getResponse()
         }
         "send-ack" -> {
-            initSmev().sendAck(args[1])
+            initSmev().sendAck("47b57dc8-373a-11ec-ba07-fa163e24a723")
         }
         else -> {
             print("Command not found")
@@ -36,9 +36,18 @@ fun initSmev(): SMEVService {
     //        keyPassword = "12345678"
     //    )
      return SMEVService(
-        schemaUrl = "http://smev3-n0.test.gosuslugi.ru:5000/ws/smev-message-exchange-service-1.3.wsdl",
-        keyAlias = "skspb",
-        keyPassword = "1234567890",
-        isTest = true
+//        schemaUrl   = System.getenv("SCHEMA_URL"),
+//        keyAlias    = System.getenv("KEY_ALIAS"),
+//        keyPassword = System.getenv("KEY_PASSWORD"),
+//        isTest      = System.getenv("TEST_FLAG") ?: "false" == "true"
+         schemaUrl = "http://esb.smev.vpn:10180/smev3Test13",
+//         schemaUrl = "http://esb.smev.vpn:10180/serviceSmev3/SMEVMessageExchangeService",
+         keyAlias = "skspb",
+         keyPassword = "1234567890",
+         isTest = true,
+         soapServiceName = "smev3Test13",
+//         soapServiceName= "SmevMessageExchangeService",
+         soapEndpointName = "smev3Test13HttpSoap11Endpoint"
+//         soapEndpointName = "SmevMessageExchangeServiceHttpSoap11Endpoint"
     )
 }
