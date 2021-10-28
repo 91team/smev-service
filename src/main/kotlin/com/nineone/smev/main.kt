@@ -40,14 +40,12 @@ fun initSmev(): SMEVService {
 //        keyAlias    = System.getenv("KEY_ALIAS"),
 //        keyPassword = System.getenv("KEY_PASSWORD"),
 //        isTest      = System.getenv("TEST_FLAG") ?: "false" == "true"
-         schemaUrl = "http://esb.smev.vpn:10180/smev3Test13",
-//         schemaUrl = "http://esb.smev.vpn:10180/serviceSmev3/SMEVMessageExchangeService",
+         schemaUrl = "http://esb.smev.vpn:10180/serviceSmev3/SMEVMessageExchangeService",
          keyAlias = "skspb",
          keyPassword = "1234567890",
+         soapServiceName = "SmevMessageExchangeService",
+         soapEndpointName = "SmevMessageExchangeServiceHttpSoap11Endpoint",
          isTest = true,
-         soapServiceName = "smev3Test13",
-//         soapServiceName= "SmevMessageExchangeService",
-         soapEndpointName = "smev3Test13HttpSoap11Endpoint"
-//         soapEndpointName = "SmevMessageExchangeServiceHttpSoap11Endpoint"
+         prettyPrint = true
     )
 }
