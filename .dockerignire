@@ -2,6 +2,7 @@
 .gradle
 /build
 /keys
+/files
 Dockerfile
 README.md
 .DS_Store

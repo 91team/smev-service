@@ -3,6 +3,7 @@
 /build
 /dist
 /keys
+/files
 /libs/*
 !/libs/.keep
 .DS_Store
