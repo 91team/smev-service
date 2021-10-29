@@ -50,13 +50,11 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
         val message = """<fedstat:PublicRequest xmlns:fedstat="urn://x-artefacts-fedstat-ru/services/public/1.0.5"><fedstat:ClassifiersRequest/></fedstat:PublicRequest>"""
 
         val sendReq = SenderProvidedRequestData().apply {
-            id = "SIGNED_BY_CALLER" // id подписи
-            messageID = IdentificationServiceImpl().generateUUID() // messageId запроса
-            if (isTest) testMessage = Void() // признак тестового сообщения
-            // nodeID("421") // имя ноды(необязательно)
-            messagePrimaryContent = MessagePrimaryContent().apply {
-                any = buildMessage(message)
-            }
+            id = "SIGNED_BY_CALLER"
+            messageID = IdentificationServiceImpl().generateUUID()
+            testMessage = Void().takeIf { isTest }
+            // nodeID("421")
+            messagePrimaryContent = MessagePrimaryContent().apply { any = buildMessage(message) }
         }
 
         val reqParam = SendRequestRequest().apply {
@@ -69,7 +67,7 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
         val smev = SMEVMessageExchangeService(schemaUrl, soapServiceQname)
         try {
             val port = smev.getPort(soapEndpointQname, SMEVMessageExchangePortType::class.java)
-            port.sendRequest(reqParam).also { println("resp = " + objectToString(it)) }
+            port.sendRequest(reqParam).run { println("resp = " + objectToString(this)) }
         } catch (e: java.lang.Exception) {
             println("ERROR ${e.javaClass.name}: ${e.message}")
         }
@@ -130,25 +128,19 @@ class SMEVService(schemaUrl: String, //указывается точка дос�
     }
 
     private fun buildMessage(data: String): Element {
-        val factory = DocumentBuilderFactory.newInstance()
-        factory.isNamespaceAware = true
-        return factory.newDocumentBuilder().parse(InputSource(StringReader(data))).documentElement
+         val builder = DocumentBuilderFactory.newInstance().apply { isNamespaceAware = true }.newDocumentBuilder()
+         return builder.parse(InputSource(StringReader(data))).documentElement
     }
 
     @Throws(JAXBException::class, IOException::class)
     private fun objectToString(obj: Any): String {
-        val jaxbMarshaller = JAXBContext.newInstance(obj::class.java).createMarshaller()
-        if (prettyPrint)
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
         val baos = ByteArrayOutputStream()
+        val jaxbMarshaller = JAXBContext.newInstance(obj::class.java).createMarshaller()
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, prettyPrint)
         jaxbMarshaller.marshal(obj, baos)
-        val content = baos.toString()
-        baos.close()
-        return content
+        return baos.toString().also { baos.close() }
     }
 
     @Throws(JAXBException::class, IOException::class)
-    fun objectToDocument(obj: Any): Document {
-        return XMLTransformHelper.buildDocumentFromString(objectToString(obj))
-    }
+    fun objectToDocument(obj: Any): Document = XMLTransformHelper.buildDocumentFromString(objectToString(obj))
 }

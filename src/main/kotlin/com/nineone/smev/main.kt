@@ -46,6 +46,6 @@ fun initSmev(): SMEVService {
          soapServiceName = "SmevMessageExchangeService",
          soapEndpointName = "SmevMessageExchangeServiceHttpSoap11Endpoint",
          isTest = true,
-         prettyPrint = true
+         prettyPrint = false
     )
 }
