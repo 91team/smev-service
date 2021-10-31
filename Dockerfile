@@ -18,6 +18,7 @@ FROM gradle:7.2-jdk8 as builder
 WORKDIR /opt/smev
 
 COPY . .
+RUN #--mount=type=cache,target=/home/gradle/.gradle gradle installDist --no-daemon
 RUN gradle installDist --no-daemon
 
 FROM jcp
