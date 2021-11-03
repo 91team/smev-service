@@ -6,4 +6,5 @@
 Dockerfile
 README.md
 .DS_Store
+.env
 adminservtool.log

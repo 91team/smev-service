@@ -7,4 +7,5 @@
 /libs/*
 !/libs/.keep
 .DS_Store
+.env
 adminservtool.log
