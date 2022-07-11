@@ -1,10 +1,11 @@
 package com.nineone.smev
 
-import java.io.File
 import java.security.KeyStore
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
+    System.setProperty("logging.level", System.getenv("LOG_LEVEL") ?: "ERROR")
+
     when (args.firstOrNull()) {
         "aliases" -> {
             // Initialize JCP and keystore
@@ -12,31 +13,34 @@ fun main(args: Array<String>) {
             ks.load(null, null)
             println("Available key aliases: ${ks.aliases().toList()}")
         }
-        "request" -> {
-            initSmev().sendRequest(File(args[1]).readText())
-        }
-        "response" -> {
-            initSmev().getResponse()
+        "server" -> {
+            println("Starting SMEV service")
+            Service(initClient()).run()
         }
         "ack" -> {
-            initSmev().sendAck(args[1])
+            var uid = "de16f324-012f-11ed-bc46-52540000001e"
+            println("Starting SMEV service")
+            println("Send ACK")
+            var client = initClient()
+            client.sendAck(uid)
         }
         else -> {
-            print("Command not found")
+            println("Command not found")
             exitProcess(1)
         }
     }
 }
 
-fun initSmev(): SMEVService {
+fun initClient(): Client {
     // Initialize SMEV service
-     return SMEVService(
+     return Client(
          schemaUrl = System.getenv("SCHEMA_URL"),
          keyAlias =  System.getenv("KEY_ALIAS"),
          keyPassword = System.getenv("KEY_PASSWORD"),
+         nodeId = System.getenv("NODE_ID"),
          soapServiceName = System.getenv("SOAP_SERVICE_NAME"),
          soapEndpointName = System.getenv("SOAP_ENDPOINT_NAME"),
          isTest = System.getenv("TEST_MESSAGE") == "true",
-         prettyPrint = false
+         prettyPrint = true
     )
 }

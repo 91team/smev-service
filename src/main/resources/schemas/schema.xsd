@@ -1,0 +1,36 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="PackageType">
+        <xs:restriction base = "xs:string">
+            <xs:enumeration value = "Request"/>
+            <xs:enumeration value = "Reply"/>
+            <xs:enumeration value = "Notify"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PackageAction">
+        <xs:restriction base = "xs:string">
+            <xs:enumeration value = "SmevRequest"/>
+            <xs:enumeration value = "Ping"/>
+            <xs:enumeration value = "OK"/>
+            <xs:enumeration value = "ERROR"/>
+            <xs:enumeration value = "MessageSent"/>
+            <xs:enumeration value = "MessageProcessing"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="ExchangePackage">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Content">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:any />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="Id"/>
+            <xs:attribute type="PackageType" name="Type"/>
+            <xs:attribute type="PackageAction" name="Action"/>
+            <xs:attribute type="xs:string" name="Message"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

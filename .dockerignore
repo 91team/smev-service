@@ -3,6 +3,8 @@
 /build
 /keys
 /files
+/logs
+/samples
 Dockerfile
 README.md
 .DS_Store

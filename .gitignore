@@ -3,6 +3,8 @@
 /build
 /dist
 /keys
+/logs
+/samples
 /files
 /libs/*
 !/libs/.keep
