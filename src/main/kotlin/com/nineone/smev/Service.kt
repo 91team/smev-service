@@ -82,8 +82,8 @@ class Service(private val client: Client) {
 
     private fun listenSmevQueue() {
         var queueDelay = false
-        val queueDelayTime: Long = 10000
-        val queueDelayTime2: Long = 20000
+        val queueDelayTime: Long = 1000
+        val queueDelayTime2: Long = 2000
 
         thread {
             while (true) {

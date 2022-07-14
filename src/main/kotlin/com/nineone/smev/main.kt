@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
             Service(initClient()).run()
         }
         "ack" -> {
-            var uid = "de16f324-012f-11ed-bc46-52540000001e"
+            var uid = "436b595a-01cf-11ed-bc46-52540000001e"
             println("Starting SMEV service")
             println("Send ACK")
             var client = initClient()

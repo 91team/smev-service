@@ -87,6 +87,8 @@ class Client(schemaUrl: String?, // точка доступа СМЭВ 3
             id = "SIGNED_BY_CALLER"
             timestamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDateTime.now().toString())
             nodeID = nodeId
+            namespaceURI = "urn://x-artefacts-rosreestr-gov-ru/virtual-services/egrn-statement/1.1.2"
+            rootElementLocalName = "Response"
         }
 
         val reqParam = GetResponseRequest().apply {

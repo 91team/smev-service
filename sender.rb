@@ -9,7 +9,7 @@ def template(id, content)
 </ExchangePackage>}
 end
 
-Dir.glob("./samples/*.xml").each do |sample|
+Dir.glob("./samples/*.xml")[0..0].each do |sample|
   request = template(SimpleUUID::UUID.new.to_guid, File.read(sample))
   path = File.join("samples/prepared", File.basename(sample))
   File.write(path, request)
