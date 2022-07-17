@@ -13,6 +13,9 @@ import org.apache.kafka.common.serialization.StringSerializer
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Element
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.time.Duration
 import javax.xml.bind.Marshaller
 import kotlin.concurrent.thread
@@ -26,6 +29,7 @@ class Service(private val client: Client) {
     private val prettyPrint = true
 
     fun run() {
+        val tmpDir = Files.createTempDirectory("smev").toFile().absolutePath
         consumer.subscribe(listOf(requestsTopic))
 
         listenSmevQueue()
@@ -35,7 +39,7 @@ class Service(private val client: Client) {
 
             if (records.isEmpty) continue
 
-            records.forEach {
+            records.forEach { it ->
                 try {
                     val request = parsePackage(it.value())
 
@@ -48,7 +52,12 @@ class Service(private val client: Client) {
                                 message = "сообщение отправлено в СМЭВ"
                             }
                             try {
-                                client.sendRequest(request.content.any as Element, request.id)
+                                val files = request.mtomList.mtomFile.toMutableList().map { mtomFile ->
+                                    File(Paths.get(tmpDir, mtomFile.fileName).toString()).also { file ->
+                                        file.writeBytes(mtomFile.value)
+                                    }
+                                }
+                                client.sendRequest(request.content.any as Element, request.id, files.toMutableList())
                             } catch(e: java.lang.Exception) {
                                 logger.error("SendRequestRequest ERROR: {}", e.toString())
                                 response.apply {
