@@ -3,6 +3,11 @@ package com.nineone.smev
 import java.security.KeyStore
 import kotlin.system.exitProcess
 
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+
+import com.nineone.smev.plugins.*
+
 fun main(args: Array<String>) {
     System.setProperty("logging.level", System.getenv("LOG_LEVEL") ?: "ERROR")
 
@@ -16,6 +21,14 @@ fun main(args: Array<String>) {
         "server" -> {
             println("Starting SMEV service")
             Service(initClient()).run()
+        }
+        "webserver" -> {
+            println("Starting SMEV web service")
+//            Service(initClient()).run()
+            embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+                configureRouting()
+                configureSerialization()
+            }.start(wait = true)
         }
         "ack" -> {
             var uid = "436b595a-01cf-11ed-bc46-52540000001e"

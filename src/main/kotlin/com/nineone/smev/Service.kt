@@ -90,19 +90,21 @@ class Service(private val client: Client) {
     }
 
     private fun listenSmevQueue() {
+        var active = true
         var queueDelay = false
         val queueDelayTime: Long = 1000
         val queueDelayTime2: Long = 2000
 
         thread {
-            while (true) {
+            while (active) {
                 if (queueDelay) {
                     queueDelay = false
                     Thread.sleep(queueDelayTime)
                 }
 
                 try {
-                    val data = client.getResponse()
+//                    active = false
+                    val data = client.getResponse(null, null)
                     val originalMessageId = data.responseMessage?.response?.originalMessageId
                     val asyncProcessingStatus = data.responseMessage?.response?.senderProvidedResponseData?.asyncProcessingStatus
                     if (originalMessageId != null) {
@@ -117,7 +119,7 @@ class Service(private val client: Client) {
                                 id = originalMessageId
                                 type = PackageType.REPLY
                                 action = PackageAction.ERROR
-                                message = (asyncProcessingStatus.statusDetails ?: asyncProcessingStatus.statusCategory) as String?
+//                                message = (asyncProcessingStatus.statusDetails ?: asyncProcessingStatus.statusCategory) as String?
                                 content = ExchangePackage.Content().apply { any = client.objectToDocument(asyncProcessingStatus).documentElement }
                             })
                         }

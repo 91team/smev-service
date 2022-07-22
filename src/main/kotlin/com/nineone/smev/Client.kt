@@ -91,19 +91,24 @@ class Client(schemaUrl: String?, // точка доступа СМЭВ 3
     }
 
     @Throws(Exception::class)
-    fun getResponse(): GetResponseResponse {
+    fun getResponse(targetMessageId: String?, senderId: String?): GetResponseResponse {
         val message = MessageTypeSelector().apply {
             id = "SIGNED_BY_CALLER"
             timestamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDateTime.now().toString())
             nodeID = nodeId
-            namespaceURI = "urn://x-artefacts-rosreestr-gov-ru/virtual-services/egrn-statement/1.1.2"
-            rootElementLocalName = "Response"
+            senderIdentifier = senderId.takeIf { senderId !== null } // "30cd0d"
+            messageID = targetMessageId.takeIf { targetMessageId !== null }
+//            senderRole = "2"
+//            originatorId = "36539c"
+//            namespaceURI = "urn://x-artefacts-rosreestr-gov-ru/virtual-services/egrn-statement/1.1.2"
+//            rootElementLocalName = "Response"
         }
 
         val reqParam = GetResponseRequest().apply {
             messageTypeSelector = message
             callerInformationSystemSignature = signElement(messageTypeSelector)
             logger.debug("GetResponseRequest(REQUEST): {}", objectToString(this))
+//            File("logs/${targetMessageId}-GetResponseRequest-REQUEST.xml").writeText(objectToString(this))
         }
 
         val smev = SMEVMessageExchangeService(schemaUrl, soapServiceQname)
