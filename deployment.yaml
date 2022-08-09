@@ -1,0 +1,84 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: smev-service-pvc
+  labels:
+    app: smev-service
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smev-service-deployment
+  labels:
+    app: smev-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smev-service
+  template:
+    metadata:
+      labels:
+        app: smev-service
+    spec:
+      volumes:
+        - name: smev-service-pv
+          persistentVolumeClaim:
+            claimName: smev-service-pvc
+      containers:
+        - name: smev-service
+          image: registry.91.team/smev/service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: smev-service-secret
+          volumeMounts:
+            - mountPath: /var/opt/cprocsp/keys/root
+              name: smev-service-pv
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smev-service
+  labels:
+    app: smev-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: api
+  clusterIP: None
+  selector:
+    app: smev-service
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: smev-service-ingress
+  labels:
+    app: smev-service
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - http: &http_rules
+        paths:
+          - path: /smev-service
+            pathType: Prefix
+            backend:
+              service:
+                name: smev-service
+                port:
+                  number: 8080
+    # - host: hostname
+    #   http: *http_rules

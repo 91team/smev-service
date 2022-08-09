@@ -94,7 +94,7 @@ class Client(schemaUrl: String?, // точка доступа СМЭВ 3
     fun getResponse(targetMessageId: String?, senderId: String?): GetResponseResponse {
         val message = MessageTypeSelector().apply {
             id = "SIGNED_BY_CALLER"
-            timestamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDateTime.now().toString())
+            timestamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDateTime.now().plusHours(3).toString())
             nodeID = nodeId
             senderIdentifier = senderId.takeIf { senderId !== null } // "30cd0d"
             messageID = targetMessageId.takeIf { targetMessageId !== null }

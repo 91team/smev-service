@@ -34,4 +34,4 @@ COPY ./entrypoint.sh /
 VOLUME [ "/var/opt/cprocsp/keys/root" ]
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["bin/smev"]
+CMD ["bin/smev", "server"]
