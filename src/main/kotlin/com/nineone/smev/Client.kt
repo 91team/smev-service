@@ -22,7 +22,8 @@ import java.io.File
 import java.io.IOException
 import java.io.StringReader
 import java.net.URL
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneId
 import javax.activation.DataHandler
 import javax.activation.FileDataSource
 import javax.xml.bind.JAXBContext
@@ -92,9 +93,11 @@ class Client(schemaUrl: String?, // точка доступа СМЭВ 3
 
     @Throws(Exception::class)
     fun getResponse(targetMessageId: String?, senderId: String?): GetResponseResponse {
+        val dateTime = OffsetDateTime.now(ZoneId.of("Europe/Moscow"))
+
         val message = MessageTypeSelector().apply {
             id = "SIGNED_BY_CALLER"
-            timestamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDateTime.now().plusHours(3).toString())
+            timestamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(dateTime.toString())
             nodeID = nodeId
             senderIdentifier = senderId.takeIf { senderId !== null } // "30cd0d"
             messageID = targetMessageId.takeIf { targetMessageId !== null }

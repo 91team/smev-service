@@ -30,6 +30,7 @@ WORKDIR /opt/smev
 
 COPY --from=builder /opt/smev/build/install/smev/ ./
 COPY ./entrypoint.sh /
+RUN mkdir ./logs
 
 VOLUME [ "/var/opt/cprocsp/keys/root" ]
 
