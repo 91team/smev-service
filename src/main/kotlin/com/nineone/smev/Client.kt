@@ -97,7 +97,7 @@ class Client(schemaUrl: String?, // точка доступа СМЭВ 3
 
         val message = MessageTypeSelector().apply {
             id = "SIGNED_BY_CALLER"
-            timestamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(dateTime.toString())
+            timestamp = DatatypeFactory.newInstance().newXMLGregorianCalendar(dateTime.toLocalDateTime().toString())
             nodeID = nodeId
             senderIdentifier = senderId.takeIf { senderId !== null } // "30cd0d"
             messageID = targetMessageId.takeIf { targetMessageId !== null }
